@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: todollist
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/tododb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true}
+    driverClassName: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:root}
+  jpa:
+    database-platform: ${JPA_PLATFORM:org.hibernate.dialect.MySQLDialect}
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:update}
+    show-sql: true
+
+server:
+  port: ${SERVER_PORT:8080}
