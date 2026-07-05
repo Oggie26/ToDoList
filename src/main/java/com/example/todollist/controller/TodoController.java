@@ -23,20 +23,17 @@ public class TodoController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<Page<TodoResponse>> getAllTodos(
-            @RequestParam(required = false) Boolean completed,
+            @RequestParam(required = false) com.example.todollist.entity.TodoStatus status,
             @RequestParam(required = false) String title,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "desc") String direction) {
         
-        Sort.Direction sortDirection = direction.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
-        
         return ApiResponse.<Page<TodoResponse>>builder()
                 .status(HttpStatus.OK.value())
                 .message("Fetched todos successfully")
-                .data(todoService.getAllTodos(completed, title, pageable))
+                .data(todoService.getAllTodos(status, title, page, size, sortBy, direction))
                 .build();
     }
 
@@ -72,11 +69,11 @@ public class TodoController {
 
     @PatchMapping("/{id}/status")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<TodoResponse> changeStatus(@PathVariable Long id, @RequestParam boolean completed) {
+    public ApiResponse<TodoResponse> changeStatus(@PathVariable Long id, @RequestParam com.example.todollist.entity.TodoStatus status) {
         return ApiResponse.<TodoResponse>builder()
                 .status(HttpStatus.OK.value())
                 .message("Changed todo status successfully")
-                .data(todoService.changeStatus(id, completed))
+                .data(todoService.changeStatus(id, status))
                 .build();
     }
 

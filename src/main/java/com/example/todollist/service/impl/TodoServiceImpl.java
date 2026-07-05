@@ -22,8 +22,10 @@ public class TodoServiceImpl implements TodoService {
     private final TodoMapper todoMapper;
 
     @Override
-    public Page<TodoResponse> getAllTodos(Boolean completed, String title, Pageable pageable) {
-        Page<Todo> todos = todoRepository.findTodosByFilter(completed, title, pageable);
+    public Page<TodoResponse> getAllTodos(com.example.todollist.entity.TodoStatus status, String title, int page, int size, String sortBy, String direction) {
+        org.springframework.data.domain.Sort.Direction sortDirection = direction.equalsIgnoreCase("asc") ? org.springframework.data.domain.Sort.Direction.ASC : org.springframework.data.domain.Sort.Direction.DESC;
+        Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size, org.springframework.data.domain.Sort.by(sortDirection, sortBy));
+        Page<Todo> todos = todoRepository.findTodosByFilter(status, title, pageable);
         return todos.map(todoMapper::toResponse);
     }
 
@@ -37,6 +39,9 @@ public class TodoServiceImpl implements TodoService {
     @Override
     @Transactional
     public TodoResponse createTodo(TodoRequest request) {
+        if (request.getStatus() == null) {
+            request.setStatus(com.example.todollist.entity.TodoStatus.TODO);
+        }
         Todo todo = todoMapper.toEntity(request);
         return todoMapper.toResponse(todoRepository.save(todo));
     }
@@ -52,10 +57,10 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @Transactional
-    public TodoResponse changeStatus(Long id, boolean completed) {
+    public TodoResponse changeStatus(Long id, com.example.todollist.entity.TodoStatus status) {
         Todo checkTodo = todoRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.TODO_NOT_FOUND));
-        checkTodo.setCompleted(completed);
+        checkTodo.setStatus(status);
         return todoMapper.toResponse(todoRepository.save(checkTodo));
     }
 

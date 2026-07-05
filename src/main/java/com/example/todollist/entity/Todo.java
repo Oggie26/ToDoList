@@ -1,6 +1,10 @@
 package com.example.todollist.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,15 +27,16 @@ public class Todo extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     @NotBlank(message = "Title is required")
     private String title;
 
-    @Column
     private String description;
 
-    @Column
+    @Enumerated(jakarta.persistence.EnumType.STRING)
     @Builder.Default
-    private boolean completed = false;
+    private TodoStatus status = TodoStatus.TODO;
+
+    private java.time.LocalDateTime dueDate;
+
 }
 

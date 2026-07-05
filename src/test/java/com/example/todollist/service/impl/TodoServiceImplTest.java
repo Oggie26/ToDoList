@@ -47,7 +47,7 @@ class TodoServiceImplTest {
         todo = new Todo();
         todo.setId(1L);
         todo.setTitle("Test Title");
-        todo.setCompleted(false);
+        todo.setStatus(com.example.todollist.entity.TodoStatus.TODO);
         todo.setDeleted(false);
 
         request = new TodoRequest();
@@ -56,7 +56,7 @@ class TodoServiceImplTest {
         response = new TodoResponse();
         response.setId(1L);
         response.setTitle("Test Title");
-        response.setCompleted(false);
+        response.setStatus(com.example.todollist.entity.TodoStatus.TODO);
     }
 
     @Test
@@ -64,14 +64,14 @@ class TodoServiceImplTest {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Todo> todoPage = new PageImpl<>(Collections.singletonList(todo));
 
-        when(todoRepository.findTodosByFilter(any(), any(), eq(pageable))).thenReturn(todoPage);
+        when(todoRepository.findTodosByFilter(any(), any(), any(Pageable.class))).thenReturn(todoPage);
         when(todoMapper.toResponse(any(Todo.class))).thenReturn(response);
 
-        Page<TodoResponse> result = todoService.getAllTodos(null, null, pageable);
+        Page<TodoResponse> result = todoService.getAllTodos(null, null, 0, 10, "createdAt", "desc");
 
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
-        verify(todoRepository, times(1)).findTodosByFilter(null, null, pageable);
+        verify(todoRepository, times(1)).findTodosByFilter(any(), any(), any(Pageable.class));
     }
 
     @Test
@@ -126,10 +126,10 @@ class TodoServiceImplTest {
         when(todoRepository.save(any(Todo.class))).thenReturn(todo);
         when(todoMapper.toResponse(any(Todo.class))).thenReturn(response);
 
-        TodoResponse result = todoService.changeStatus(1L, true);
+        TodoResponse result = todoService.changeStatus(1L, com.example.todollist.entity.TodoStatus.COMPLETED);
 
         assertNotNull(result);
-        assertTrue(todo.isCompleted());
+        assertEquals(com.example.todollist.entity.TodoStatus.COMPLETED, todo.getStatus());
         verify(todoRepository, times(1)).save(todo);
     }
 

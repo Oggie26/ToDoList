@@ -39,9 +39,9 @@ public class TodoControllerTest {
         TodoResponse todo = new TodoResponse();
         todo.setId(1L);
         todo.setTitle("Test task");
-        todo.setCompleted(false);
+        todo.setStatus(com.example.todollist.entity.TodoStatus.TODO);
 
-        when(todoService.getAllTodos(any(), any(), any()))
+        when(todoService.getAllTodos(any(), any(), org.mockito.ArgumentMatchers.anyInt(), org.mockito.ArgumentMatchers.anyInt(), any(), any()))
                 .thenReturn(new PageImpl<>(Collections.singletonList(todo), PageRequest.of(0, 10), 1));
 
         mockMvc.perform(get("/api/todos"))

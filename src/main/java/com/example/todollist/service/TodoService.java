@@ -6,10 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface TodoService {
-    Page<TodoResponse> getAllTodos(Boolean completed, String title, Pageable pageable);
+    Page<TodoResponse> getAllTodos(com.example.todollist.entity.TodoStatus status, String title, int page, int size, String sortBy, String direction);
     TodoResponse getTodoById(Long id);
     TodoResponse createTodo(TodoRequest request);
     TodoResponse updateTodo(Long id, TodoRequest request);
-    TodoResponse changeStatus(Long id, boolean completed);
+    TodoResponse changeStatus(Long id, com.example.todollist.entity.TodoStatus status);
     void deleteTodo(Long id);
 }

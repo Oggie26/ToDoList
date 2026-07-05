@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Long> {
-    @Query("SELECT t FROM Todo t WHERE (:completed IS NULL OR t.completed = :completed) " +
+    @Query("SELECT t FROM Todo t WHERE (:status IS NULL OR t.status = :status) " +
            "AND (:title IS NULL OR LOWER(t.title) LIKE LOWER(CONCAT('%', :title, '%')))")
-    Page<Todo> findTodosByFilter(@Param("completed") Boolean completed, @Param("title") String title, Pageable pageable);
+    Page<Todo> findTodosByFilter(@Param("status") com.example.todollist.entity.TodoStatus status, @Param("title") String title, Pageable pageable);
 }
