@@ -7,6 +7,7 @@ import com.example.todollist.exception.AppException;
 import com.example.todollist.exception.ErrorCode;
 import com.example.todollist.mapper.TodoMapper;
 import com.example.todollist.repository.TodoRepository;
+import com.example.todollist.enums.TodoStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +48,7 @@ class TodoServiceImplTest {
         todo = new Todo();
         todo.setId(1L);
         todo.setTitle("Test Title");
-        todo.setStatus(com.example.todollist.entity.TodoStatus.TODO);
+        todo.setStatus(TodoStatus.TODO);
         todo.setDeleted(false);
 
         request = new TodoRequest();
@@ -56,7 +57,7 @@ class TodoServiceImplTest {
         response = new TodoResponse();
         response.setId(1L);
         response.setTitle("Test Title");
-        response.setStatus(com.example.todollist.entity.TodoStatus.TODO);
+        response.setStatus(TodoStatus.TODO);
     }
 
     @Test
@@ -126,10 +127,10 @@ class TodoServiceImplTest {
         when(todoRepository.save(any(Todo.class))).thenReturn(todo);
         when(todoMapper.toResponse(any(Todo.class))).thenReturn(response);
 
-        TodoResponse result = todoService.changeStatus(1L, com.example.todollist.entity.TodoStatus.COMPLETED);
+        TodoResponse result = todoService.changeStatus(1L, TodoStatus.COMPLETED);
 
         assertNotNull(result);
-        assertEquals(com.example.todollist.entity.TodoStatus.COMPLETED, todo.getStatus());
+        assertEquals(TodoStatus.COMPLETED, todo.getStatus());
         verify(todoRepository, times(1)).save(todo);
     }
 

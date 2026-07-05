@@ -8,6 +8,7 @@ import com.example.todollist.exception.ErrorCode;
 import com.example.todollist.mapper.TodoMapper;
 import com.example.todollist.repository.TodoRepository;
 import com.example.todollist.service.TodoService;
+import com.example.todollist.enums.TodoStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,7 @@ public class TodoServiceImpl implements TodoService {
     private final TodoMapper todoMapper;
 
     @Override
-    public Page<TodoResponse> getAllTodos(com.example.todollist.entity.TodoStatus status, String title, int page, int size, String sortBy, String direction) {
+    public Page<TodoResponse> getAllTodos(TodoStatus status, String title, int page, int size, String sortBy, String direction) {
         org.springframework.data.domain.Sort.Direction sortDirection = direction.equalsIgnoreCase("asc") ? org.springframework.data.domain.Sort.Direction.ASC : org.springframework.data.domain.Sort.Direction.DESC;
         Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size, org.springframework.data.domain.Sort.by(sortDirection, sortBy));
         Page<Todo> todos = todoRepository.findTodosByFilter(status, title, pageable);
@@ -40,7 +41,7 @@ public class TodoServiceImpl implements TodoService {
     @Transactional
     public TodoResponse createTodo(TodoRequest request) {
         if (request.getStatus() == null) {
-            request.setStatus(com.example.todollist.entity.TodoStatus.TODO);
+            request.setStatus(TodoStatus.TODO);
         }
         Todo todo = todoMapper.toEntity(request);
         return todoMapper.toResponse(todoRepository.save(todo));
@@ -57,7 +58,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     @Transactional
-    public TodoResponse changeStatus(Long id, com.example.todollist.entity.TodoStatus status) {
+    public TodoResponse changeStatus(Long id, TodoStatus status) {
         Todo checkTodo = todoRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.TODO_NOT_FOUND));
         checkTodo.setStatus(status);

@@ -4,12 +4,10 @@ import com.example.todollist.dto.ApiResponse;
 import com.example.todollist.dto.TodoRequest;
 import com.example.todollist.dto.TodoResponse;
 import com.example.todollist.service.TodoService;
+import com.example.todollist.enums.TodoStatus;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +21,7 @@ public class TodoController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ApiResponse<Page<TodoResponse>> getAllTodos(
-            @RequestParam(required = false) com.example.todollist.entity.TodoStatus status,
+            @RequestParam(required = false) TodoStatus status,
             @RequestParam(required = false) String title,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -69,7 +67,7 @@ public class TodoController {
 
     @PatchMapping("/{id}/status")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<TodoResponse> changeStatus(@PathVariable Long id, @RequestParam com.example.todollist.entity.TodoStatus status) {
+    public ApiResponse<TodoResponse> changeStatus(@PathVariable Long id, @RequestParam TodoStatus status) {
         return ApiResponse.<TodoResponse>builder()
                 .status(HttpStatus.OK.value())
                 .message("Changed todo status successfully")

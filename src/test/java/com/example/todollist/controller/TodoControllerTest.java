@@ -4,6 +4,7 @@ import com.example.todollist.dto.TodoRequest;
 import com.example.todollist.dto.TodoResponse;
 import com.example.todollist.service.TodoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.todollist.enums.TodoStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -39,7 +40,7 @@ public class TodoControllerTest {
         TodoResponse todo = new TodoResponse();
         todo.setId(1L);
         todo.setTitle("Test task");
-        todo.setStatus(com.example.todollist.entity.TodoStatus.TODO);
+        todo.setStatus(TodoStatus.TODO);
 
         when(todoService.getAllTodos(any(), any(), org.mockito.ArgumentMatchers.anyInt(), org.mockito.ArgumentMatchers.anyInt(), any(), any()))
                 .thenReturn(new PageImpl<>(Collections.singletonList(todo), PageRequest.of(0, 10), 1));

@@ -1,5 +1,7 @@
 package com.example.todollist.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.example.todollist.enums.TodoStatus;
 import lombok.Data;
 import java.time.LocalDateTime;
 
@@ -8,13 +10,13 @@ public class TodoResponse {
     private Long id;
     private String title;
     private String description;
-    private com.example.todollist.entity.TodoStatus status;
+    private TodoStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime dueDate;
 
-    @com.fasterxml.jackson.annotation.JsonProperty("isOverdue")
+    @JsonProperty("isOverdue")
     public boolean isOverdue() {
-        return status != com.example.todollist.entity.TodoStatus.COMPLETED 
+        return status != TodoStatus.COMPLETED
                 && dueDate != null 
                 && dueDate.isBefore(LocalDateTime.now());
     }
