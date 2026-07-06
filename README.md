@@ -38,6 +38,9 @@ Cach nay se chay ung dung va database MySQL trong container, rat tien loi neu ba
    docker-compose up --build
 5. API se chay o: http://localhost:8080
 
+### Cach 3: Chay trên Server tren FrontEnd 
+https://to-do-list-fe-jet.vercel.app/
+API se chay o: https://www.furnimart.click/
 ## Chay Unit Test
 De chay cac Unit Test, su dung lenh:
 ./mvnw test
